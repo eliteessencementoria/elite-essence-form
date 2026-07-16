@@ -385,6 +385,89 @@
     .brand-name { font-size: 1.75rem; }
     .period-group { gap: 0.45rem; }
   }
+
+  /* Especialista radio buttons */
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .radio-option {
+    position: relative;
+  }
+
+  .radio-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .radio-option label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255,255,255,0.03);
+    border: 0.5px solid rgba(201,168,76,0.18);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    text-transform: none;
+    letter-spacing: 0.04em;
+    font-weight: 300;
+    margin: 0;
+  }
+
+  .radio-option label .radio-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(201,168,76,0.35);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .radio-option label .radio-dot::after {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .radio-option input:checked + label {
+    background: rgba(201,168,76,0.10);
+    border-color: var(--gold);
+    color: var(--gold-light);
+  }
+
+  .radio-option input:checked + label .radio-dot {
+    border-color: var(--gold);
+  }
+
+  .radio-option input:checked + label .radio-dot::after {
+    opacity: 1;
+  }
+
+  .radio-option label:hover {
+    border-color: rgba(201,168,76,0.4);
+    background: rgba(201,168,76,0.06);
+    color: rgba(255,255,255,0.75);
+  }
+
+  .radio-option .radio-emoji {
+    font-size: 1.1rem;
+  }
+
 </style>
 </head>
 <body>
@@ -450,6 +533,37 @@
         </div>
         <div class="field-hint">Pode selecionar mais de um período.</div>
         <div class="error-msg" id="err-periodo">Selecione ao menos um período de contato.</div>
+      </div>
+
+      <div class="field">
+        <label>Preferência de especialista</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="especialista" id="esp-homem" value="Especialista Homem">
+            <label for="esp-homem">
+              <span class="radio-dot"></span>
+              <span class="radio-emoji">👨‍💼</span>
+              Prefiro falar com um especialista homem
+            </label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="especialista" id="esp-mulher" value="Especialista Mulher">
+            <label for="esp-mulher">
+              <span class="radio-dot"></span>
+              <span class="radio-emoji">👩‍💼</span>
+              Prefiro falar com uma especialista mulher
+            </label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="especialista" id="esp-ambos" value="Fico à vontade com qualquer especialista" checked>
+            <label for="esp-ambos">
+              <span class="radio-dot"></span>
+              <span class="radio-emoji">✨</span>
+              Fico à vontade com qualquer especialista
+            </label>
+          </div>
+        </div>
+        <div class="error-msg" id="err-especialista">Por favor, selecione uma opção.</div>
       </div>
 
       <button class="btn-submit" id="btn-enviar" onclick="handleSubmit()">
@@ -543,7 +657,8 @@
       hora: now.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }),
       nome,
       whatsapp: tel,
-      melhor_horario: periodos.join(' / ')
+      melhor_horario: periodos.join(' / '),
+      especialista: document.querySelector('input[name="especialista"]:checked')?.value || 'Fico à vontade com qualquer especialista'
     };
 
     try {
